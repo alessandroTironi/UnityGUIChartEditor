@@ -12,6 +12,13 @@ namespace NothingButTheGame.ChartEditor
 		public static ChartInstance CurrentChart { get; private set; }
 
 		/// <summary>
+		/// A generic function y = f(x).
+		/// </summary>
+		/// <param name="x">The function parameter (X coordinate on the chart).</param>
+		/// <returns>The Y value computed as y = f(x).</returns>
+		public delegate float ChartFunction(float x);
+
+		/// <summary>
 		/// Starts drawing a new chart.
 		/// </summary>
 		/// <param name="layoutRect">The <see cref="Rect"/> used as layout.</param>
@@ -82,6 +89,62 @@ namespace NothingButTheGame.ChartEditor
 			p.pointColor = pointColor;
 			p.point = CurrentChart.coordinatesProcessor(point.x, point.y);
 			CurrentChart.pointQueue.Enqueue(p);
+		}
+
+		/// <summary>
+		/// Plots a function defined by a lambda inside the provided interval.
+		/// </summary>
+		/// <param name="function">The function to plot.</param>
+		/// <param name="min">The left bound of the interval.</param>
+		/// <param name="max">The right bound of the interval.</param>
+		/// <param name="functionColor">The color of the plot.</param>
+		/// <param name="step">The sample step. Default will compute f(x) on each pixel.</param>
+		public static void PushFunction(ChartFunction function, float min, float max,
+			Color functionColor, float step = -1f)
+		{
+			if (min < CurrentChart.minX)
+				min = CurrentChart.minX;
+			if (max > CurrentChart.maxX)
+				max = CurrentChart.maxX;
+
+			// Computes the default step value.
+			if (step < 0)
+				step = CurrentChart.userDefinedRect.width / CurrentChart.pixelSizeRect.width;
+
+			List<Vector2> samples = new List<Vector2>();
+			for (float x = min; x < max; x += step)
+			{
+				float y = function(x);
+				if (y > CurrentChart.maxY)
+				{
+					// If the function exits the layout rect from above then find
+					// the intersection point and break loop.
+					float xPrev = x - step;
+					float yPrev = function(xPrev);
+					float xMiddle = (x - xPrev) * ((xPrev / (x - xPrev)) + 
+						((CurrentChart.maxY - yPrev) / (y - yPrev)));
+					samples.Add(new Vector2(xMiddle, function(xMiddle)));
+					break;
+				}
+				if (y < CurrentChart.minY)
+				{
+					// If the function exits the layout rect from below then
+					// find the next point. If f(next) > minY then find the intersection
+					// with current point and draw the half-segment. Otherwise continue.
+					float xNext = x + step;
+					float yNext = function(xNext);
+					if (xNext < max && yNext >= CurrentChart.minY)
+					{
+						float xMiddle = (xNext - x) * ((x / (xNext - x)) +
+							((CurrentChart.minY - y) / (yNext - y)));
+						samples.Add(new Vector2(xMiddle, function(xMiddle)));
+						x += step;
+					}
+				}
+				else
+					samples.Add(new Vector2(x, y));
+			}
+			PushLineChart(samples.ToArray(), functionColor);
 		}
 
 		/// <summary>

@@ -40,6 +40,9 @@ public class ExampleCustomEditor : Editor
 			GUIChartEditor.PushLineChart(points, functionColor);
 		}
 
+		// Additional test: draws a lambda-defined function.
+		GUIChartEditor.PushFunction(x => x * x * x, -10f, 10f, new Color(0f, 1f, 0f, 0.5f));
+
 		GUIChartEditor.EndChart();
 	}
 }
