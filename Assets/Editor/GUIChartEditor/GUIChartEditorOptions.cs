@@ -56,7 +56,7 @@ namespace NothingButTheGame.ChartEditor
 			/// Scale rate values.
 			/// </summary>
 			float minX, maxX, minY, maxY;
-			public ChartBoundsOption(float minX, float maxX, float minY, float maxY)
+			public ChartBoundsOption(float minX, float maxX, float minY, float maxY) : base(0)
 			{
 				(this.minX, this.maxX, this.minY, this.maxY) = (minX, maxX, minY, maxY);
 			}
@@ -80,12 +80,12 @@ namespace NothingButTheGame.ChartEditor
 		private class ShowAxesOption : ChartOption
 		{
 			private Color axesColor;
-			public ShowAxesOption(Color axesColor)
+			public ShowAxesOption(Color axesColor) : base(2)
 			{
 				this.axesColor = axesColor;
 			}
 
-			public override void ApplyOption()
+			public override void ApplyOption() 
 			{
 				GUIChartEditor.CurrentChart.showAxes = true;
 				GUIChartEditor.CurrentChart.axesColor = axesColor;
@@ -98,7 +98,7 @@ namespace NothingButTheGame.ChartEditor
 		private class SetOriginOption : ChartOption
 		{
 			Origins originType;
-			public SetOriginOption(Origins originType)
+			public SetOriginOption(Origins originType) : base(1)
 			{
 				this.originType = originType;
 			}
@@ -120,7 +120,7 @@ namespace NothingButTheGame.ChartEditor
 			private float hSize, vSize;
 			private Color gridColor;
 
-			public ShowGridOption(float hSize, float vSize, Color gridColor)
+			public ShowGridOption(float hSize, float vSize, Color gridColor) : base(2)
 			{
 				this.hSize = hSize;
 				this.vSize = vSize;
@@ -172,6 +172,13 @@ namespace NothingButTheGame.ChartEditor
 	/// </summary>
 	public abstract class ChartOption
 	{
+		public int Priority { get; protected set; } = 0;
+
+		public ChartOption(int priority)
+		{
+			Priority = priority;
+		}
+
 		public abstract void ApplyOption();
 	}
 }

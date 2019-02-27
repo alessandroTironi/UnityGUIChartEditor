@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 namespace NothingButTheGame.ChartEditor
@@ -24,7 +25,9 @@ namespace NothingButTheGame.ChartEditor
 			CurrentChart = new ChartInstance(layoutRect, backgroundColor);
 
 			// Applies options.
-			foreach (var option in options)
+			var optionsList = new List<ChartOption>(options);
+			optionsList.Sort(new ChartOptionComparer());
+			foreach (var option in optionsList)
 				option.ApplyOption();
 		}
 
