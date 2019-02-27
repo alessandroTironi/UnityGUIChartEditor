@@ -21,11 +21,25 @@ public class ExampleCustomEditor : Editor
 		float gridCellHorSize = serializedObject.FindProperty("gridCellHorizontalSize").floatValue;
 		float gridCellVerSize = serializedObject.FindProperty("gridCellVerticalSize").floatValue;
 
-		GUIChartEditor.BeginChart(10, 100, 10, 100, Color.black,
+		GUIChartEditor.BeginChart(10, 100, 100, 100, Color.black,
 			GUIChartEditorOptions.ChartBounds(minX, maxX, minY, maxY),
 			GUIChartEditorOptions.SetOrigin(originType),
 			GUIChartEditorOptions.ShowAxes(axesColor),
 			GUIChartEditorOptions.ShowGrid(gridCellHorSize, gridCellVerSize, gridColor));
+
+		// Draws lines
+		SerializedProperty[] functions = 
+			new SerializedProperty[serializedObject.FindProperty("functions").arraySize];
+		for (int i = 0; i < functions.Length; i++)
+		{
+			functions[i] = serializedObject.FindProperty("functions").GetArrayElementAtIndex(i);
+			Vector2[] points = new Vector2[functions[i].FindPropertyRelative("points").arraySize];
+			Color functionColor = functions[i].FindPropertyRelative("funColor").colorValue;
+			for (int j = 0; j < points.Length; j++)
+				points[j] = functions[i].FindPropertyRelative("points").GetArrayElementAtIndex(j).vector2Value;
+			GUIChartEditor.PushLineChart(points, functionColor);
+		}
+
 		GUIChartEditor.EndChart();
 	}
 }
