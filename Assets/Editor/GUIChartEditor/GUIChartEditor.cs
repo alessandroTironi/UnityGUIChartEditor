@@ -15,6 +15,7 @@ namespace NothingButTheGame.ChartEditor
 		/// </summary>
 		/// <param name="layoutRect">The <see cref="Rect"/> used as layout.</param>
 		/// <param name="backgroundColor">The color used for the background.</param>
+		/// <param name="options">A set of options for customizing the chart.</param>
 		public static void BeginChart(Rect layoutRect, Color backgroundColor, params ChartOption[] options)
 		{
 			GUILayout.BeginHorizontal(EditorStyles.helpBox);
@@ -25,6 +26,23 @@ namespace NothingButTheGame.ChartEditor
 			// Applies options.
 			foreach (var option in options)
 				option.ApplyOption();
+		}
+
+		/// <summary>
+		/// Draws a rectangular clip used as background for a chart in the current inspector
+		/// position.
+		/// </summary>
+		/// <param name="minWidth">The rect minimum width.</param>
+		/// <param name="maxWidth">The rect maximum width.</param>
+		/// <param name="minHeight">The rect minimum height.</param>
+		/// <param name="maxHeight">The rect maximum height.</param>
+		/// <param name="backgroundColor">The color of the background.</param>
+		/// <param name="options">A set of options to customize the chart.</param>
+		public static void BeginChart(float minWidth, float maxWidth, float minHeight, float maxHeight,
+			Color backgroundColor, params ChartOption[] options)
+		{
+			Rect layoutRect = GUILayoutUtility.GetRect(minWidth, maxWidth, minHeight, maxHeight);
+			BeginChart(layoutRect, backgroundColor, options);
 		}
 
 		/// <summary>

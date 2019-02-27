@@ -21,7 +21,7 @@ public class ExampleCustomEditor : Editor
 		float gridCellHorSize = serializedObject.FindProperty("gridCellHorizontalSize").floatValue;
 		float gridCellVerSize = serializedObject.FindProperty("gridCellVerticalSize").floatValue;
 
-		GUIChartEditor.BeginChart(GUILayoutUtility.GetRect(10, 100, 10, 100), Color.black,
+		GUIChartEditor.BeginChart(10, 100, 10, 100, Color.black,
 			GUIChartEditorOptions.ChartBounds(minX, maxX, minY, maxY),
 			GUIChartEditorOptions.SetOrigin(originType),
 			GUIChartEditorOptions.ShowAxes(axesColor),
