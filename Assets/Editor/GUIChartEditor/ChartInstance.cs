@@ -20,14 +20,19 @@ namespace NothingButTheGame.ChartEditor
 		protected internal ProcessPointCoordinates coordinatesProcessor;
 
 		/// <summary>
-		/// The stack of lines to be drawn.
+		/// The queue of lines to be drawn.
 		/// </summary>
 		protected internal Queue<Line> lineQueue { get; private set; } = new Queue<Line>();
 
 		/// <summary>
-		/// The stack of points to be drawn.
+		/// The queue of points to be drawn.
 		/// </summary>
 		protected internal Queue<Point> pointQueue { get; private set; } = new Queue<Point>();
+
+		/// <summary>
+		/// The queue of textures to be drawn.
+		/// </summary>
+		protected internal Queue<Texture> textureQueue { get; private set; } = new Queue<Texture>();
 
 		/// <summary>
 		/// The current layout rect.
@@ -75,6 +80,15 @@ namespace NothingButTheGame.ChartEditor
 		{
 			public Color pointColor;
 			public Vector2 point;
+		}
+
+		/// <summary>
+		/// A texture drawn on the chart.
+		/// </summary>
+		protected internal struct Texture
+		{
+			public Texture2D texture;
+			public Rect rect;
 		}
 
 		public ChartInstance(Rect layoutRect, Color backgroundColor)

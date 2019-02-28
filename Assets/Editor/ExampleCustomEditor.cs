@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using NothingButTheGame.ChartEditor;
+using UnityEngine.Experimental.UIElements;
 
 [CustomEditor(typeof(ExampleMonobehaviour))]
 public class ExampleCustomEditor : Editor
@@ -40,9 +41,17 @@ public class ExampleCustomEditor : Editor
 			GUIChartEditor.PushLineChart(points, functionColor);
 		}
 
+		
+
 		// Additional test: draws a lambda-defined function.
 		GUIChartEditor.PushFunction(x => x * x * x, -10f, 10f, new Color(0f, 1f, 0f, 0.5f));
 
+		// Adds some labels.
+		GUIChartEditor.PushValueLabel(1, 1f, -0.1f, "0.##");
+		GUIChartEditor.PushValueLabel(1, -0.075f, 1f, "0.##");
+
 		GUIChartEditor.EndChart();
+		//Graphics.DrawTexture(new Rect(GUIChartEditor.CurrentChart.pixelSizeRect.x,
+		//	GUIChartEditor.CurrentChart.pixelSizeRect.y, 50, 50), testTexture);
 	}
 }

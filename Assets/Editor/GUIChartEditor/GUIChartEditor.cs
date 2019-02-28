@@ -4,8 +4,14 @@ using UnityEngine;
 
 namespace NothingButTheGame.ChartEditor
 {
-	public class GUIChartEditor
+	public static class GUIChartEditor
 	{
+		static GUIChartEditor()
+		{
+			if (sprites == null)
+				sprites = new GUIChartEditorSprites();
+		}
+
 		/// <summary>
 		/// The current instance of the drawed chart.
 		/// </summary>
@@ -17,6 +23,11 @@ namespace NothingButTheGame.ChartEditor
 		/// <param name="x">The function parameter (X coordinate on the chart).</param>
 		/// <returns>The Y value computed as y = f(x).</returns>
 		public delegate float ChartFunction(float x);
+
+		/// <summary>
+		/// Collects all the required sprites.
+		/// </summary>
+		private static GUIChartEditorSprites sprites = null;
 
 		/// <summary>
 		/// Starts drawing a new chart.
@@ -89,6 +100,16 @@ namespace NothingButTheGame.ChartEditor
 			p.pointColor = pointColor;
 			p.point = CurrentChart.coordinatesProcessor(point.x, point.y);
 			CurrentChart.pointQueue.Enqueue(p);
+		}
+
+
+		public static void PushValueLabel(float value, float x, float y, string floatFormat = "0.00")
+		{
+			Vector2 coords = CurrentChart.coordinatesProcessor(x, y);
+			string textFloat = value.ToString(floatFormat).Replace(',', '.');
+			var requiredTextures = sprites.GetTextures(textFloat, (int)coords.x, (int)coords.y);
+			foreach (var tex in requiredTextures)
+				CurrentChart.textureQueue.Enqueue(tex);
 		}
 
 		/// <summary>
@@ -218,6 +239,17 @@ namespace NothingButTheGame.ChartEditor
 			}
 
 			GUILayout.EndHorizontal();
+
+			// Draws textures only after GUI.EndClip().
+			if (Event.current.type == EventType.Repaint)
+				while (CurrentChart.textureQueue.Count > 0)
+				{
+					ChartInstance.Texture tex = CurrentChart.textureQueue.Dequeue();
+					Rect absRect = new Rect(CurrentChart.pixelSizeRect.x + tex.rect.x,
+						CurrentChart.pixelSizeRect.y + tex.rect.y, tex.texture.width, tex.texture.height);
+					Graphics.DrawTexture(absRect, tex.texture);
+					//Graphics.DrawTexture(new Rect(0, 0, 10, 10), tex.texture);
+				}
 		}
 	}
 }
