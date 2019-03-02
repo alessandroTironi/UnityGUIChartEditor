@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using UnityEditor;
 using UnityEngine;
 
 namespace NothingButTheGame.ChartEditor
@@ -24,19 +25,18 @@ namespace NothingButTheGame.ChartEditor
 			Digits = new Dictionary<string, Texture2D>();
 
 			// Loads textures in memory.
-			string digitsFolder = Path.Combine(Application.streamingAssetsPath, "GUIChartEditor", "Images");
+			string digitsFolder = Path.Combine("Assets", "Editor", "GUIChartEditor", "ChartNumberImages");
 			for (int i = 0; i < 10; i++)
 			{
-				WWW texFile = new WWW("file://" + Path.Combine(digitsFolder,
+				Digits[i.ToString()] = AssetDatabase.LoadAssetAtPath<Texture2D>(Path.Combine(digitsFolder,
 					"Digit_" + i.ToString() + ".png"));
-				// Since we are loading from localhost, this while is not crytical.
-				while (!texFile.isDone) ;
-				Digits[i.ToString()] = texFile.texture;
+				Debug.Log(Digits[i.ToString()]);
+				Debug.Log((Digits[i.ToString()].width, Digits[i.ToString()].height));
 			}
+
 			// Loads the dot.
-			WWW dotTexFile = new WWW("file://" + Path.Combine(digitsFolder, "Digit_Dot.png"));
-			while (!dotTexFile.isDone) ;
-			Digits["."] = dotTexFile.texture;
+			string dotTexFile = Path.Combine(digitsFolder, "Digit_Dot.png");
+			Digits["."] = AssetDatabase.LoadAssetAtPath<Texture2D>(dotTexFile);
 		}
 
 		/// <summary>
