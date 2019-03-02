@@ -27,12 +27,8 @@ namespace NothingButTheGame.ChartEditor
 			// Loads textures in memory.
 			string digitsFolder = Path.Combine("Assets", "Editor", "GUIChartEditor", "ChartNumberImages");
 			for (int i = 0; i < 10; i++)
-			{
 				Digits[i.ToString()] = AssetDatabase.LoadAssetAtPath<Texture2D>(Path.Combine(digitsFolder,
 					"Digit_" + i.ToString() + ".png"));
-				Debug.Log(Digits[i.ToString()]);
-				Debug.Log((Digits[i.ToString()].width, Digits[i.ToString()].height));
-			}
 
 			// Loads the dot.
 			string dotTexFile = Path.Combine(digitsFolder, "Digit_Dot.png");
