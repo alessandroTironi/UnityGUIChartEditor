@@ -102,7 +102,13 @@ namespace NothingButTheGame.ChartEditor
 			CurrentChart.pointQueue.Enqueue(p);
 		}
 
-
+		/// <summary>
+		/// Draws a label representing a float number in the provided position.
+		/// </summary>
+		/// <param name="value">The number to draw on the chart.</param>
+		/// <param name="x">The X position of the label (in user space).</param>
+		/// <param name="y">The Y position of the label (in user space).</param>
+		/// <param name="floatFormat">The format to apply when converting float to string.</param>
 		public static void PushValueLabel(float value, float x, float y, string floatFormat = "0.00")
 		{
 			Vector2 coords = CurrentChart.coordinatesProcessor(x, y);
@@ -246,9 +252,8 @@ namespace NothingButTheGame.ChartEditor
 				{
 					ChartInstance.Texture tex = CurrentChart.textureQueue.Dequeue();
 					Rect absRect = new Rect(CurrentChart.pixelSizeRect.x + tex.rect.x,
-						CurrentChart.pixelSizeRect.y + tex.rect.y, tex.texture.width, tex.texture.height);
+						CurrentChart.pixelSizeRect.y + tex.rect.y, tex.rect.width, tex.rect.height);
 					Graphics.DrawTexture(absRect, tex.texture);
-					//Graphics.DrawTexture(new Rect(0, 0, 10, 10), tex.texture);
 				}
 		}
 	}

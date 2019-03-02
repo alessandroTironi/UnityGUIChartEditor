@@ -114,7 +114,9 @@ namespace NothingButTheGame.ChartEditor
 			}
 		}
 
-
+		/// <summary>
+		/// Shows a grid with defined cell sizes.
+		/// </summary>
 		private class ShowGridOption : ChartOption
 		{
 			private float hSize, vSize;

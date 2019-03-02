@@ -81,7 +81,7 @@ namespace NothingButTheGame.ChartEditor
 				textures[i++] = new ChartInstance.Texture()
 				{
 					texture = tex,
-					rect = new Rect(x, y, tex.width, rect.height - tex.height)
+					rect = new Rect(x, y, tex.width, tex.height)
 				};
 				x += tex.width;
 			}

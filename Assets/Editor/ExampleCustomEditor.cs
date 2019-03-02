@@ -47,8 +47,8 @@ public class ExampleCustomEditor : Editor
 		GUIChartEditor.PushFunction(x => x * x * x, -10f, 10f, new Color(0f, 1f, 0f, 0.5f));
 
 		// Adds some labels.
-		GUIChartEditor.PushValueLabel(1, 1f, -0.1f, "0.##");
-		GUIChartEditor.PushValueLabel(1, -0.075f, 1f, "0.##");
+		GUIChartEditor.PushValueLabel(1f, 1f, -0.1f, "0.0");
+		GUIChartEditor.PushValueLabel(1f, -0.075f, 1f, "0.0");
 
 		GUIChartEditor.EndChart();
 		//Graphics.DrawTexture(new Rect(GUIChartEditor.CurrentChart.pixelSizeRect.x,
