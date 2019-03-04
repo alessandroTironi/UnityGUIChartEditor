@@ -48,6 +48,16 @@ namespace NothingButTheGame.ChartEditor
 		}
 
 		/// <summary>
+		/// Shows numeric labels on the chart.
+		/// </summary>
+		/// <param name="format">The formatting string used to stringify provided values.</param>
+		/// <param name="labels">3-ples of floats representing value, X and Y of each label.</param>
+		public static ChartOption ShowLabels(string format, params float[] labels)
+		{
+			return new ShowLabelsOption(format, labels);
+		}
+
+		/// <summary>
 		/// Sets a new proportion for the rect.
 		/// </summary>
 		private class ChartBoundsOption : ChartOption
@@ -156,6 +166,36 @@ namespace NothingButTheGame.ChartEditor
 					}, gridColor);
 					y += vSize;
 				}
+			}
+		}
+
+		private class ShowLabelsOption : ChartOption
+		{
+			/// <summary>
+			/// The coordinates + value of the labels to show.
+			/// </summary>
+			private float[] labels;
+
+			/// <summary>
+			/// The string that defines the formatting rule for labels.
+			/// </summary>
+			private string format;
+
+			public ShowLabelsOption(string format, params float[] labels) : base(3)
+			{
+				if (labels.Length % 3 != 0)
+				{
+					Debug.LogError("ShowLabels requires a multiple of 3 parameters.");
+					return;
+				}
+				this.format = format;
+				this.labels = labels;
+			}
+
+			public override void ApplyOption()
+			{
+				for (int i = 0; i < labels.Length; i += 3)
+					GUIChartEditor.PushValueLabel(labels[i], labels[i + 1], labels[i + 2], format);
 			}
 		}
 
