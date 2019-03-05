@@ -237,24 +237,32 @@ namespace NothingButTheGame.ChartEditor
 					foreach (Vector2 p in l.points)
 						GL.Vertex3(p.x, p.y, 0);
 				}
-
 				GL.End();
+
+				// Draws textures.
+				Material guiTexMat = new Material(Shader.Find("Hidden/Internal-GUITexture"));
+				while (CurrentChart.textureQueue.Count > 0)
+				{
+					GL.Begin(GL.QUADS);
+					var tex = CurrentChart.textureQueue.Dequeue();
+					guiTexMat.SetTexture("_MainTex", tex.texture);
+					guiTexMat.SetPass(0);
+					GL.TexCoord2(0, 1);
+					GL.Vertex3(tex.rect.x, tex.rect.y, 0);
+					GL.TexCoord2(0, 0);
+					GL.Vertex3(tex.rect.x, tex.rect.y + tex.rect.height, 0);
+					GL.TexCoord2(1, 0);
+					GL.Vertex3(tex.rect.x + tex.rect.width, tex.rect.y + tex.rect.height, 0);
+					GL.TexCoord2(1, 1);
+					GL.Vertex3(tex.rect.x + tex.rect.width, tex.rect.y, 0);
+					GL.End();
+				}
 
 				GL.PopMatrix();
 				GUI.EndClip();
 			}
 
 			GUILayout.EndHorizontal();
-
-			// Draws textures only after GUI.EndClip().
-			if (Event.current.type == EventType.Repaint)
-				while (CurrentChart.textureQueue.Count > 0)
-				{
-					ChartInstance.Texture tex = CurrentChart.textureQueue.Dequeue();
-					Rect absRect = new Rect(CurrentChart.pixelSizeRect.x + tex.rect.x,
-						CurrentChart.pixelSizeRect.y + tex.rect.y, tex.rect.width, tex.rect.height);
-					Graphics.DrawTexture(absRect, tex.texture);
-				}
 		}
 	}
 }
