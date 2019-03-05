@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -27,7 +27,7 @@ namespace NothingButTheGame.ChartEditor
 		/// <summary>
 		/// Collects all the required sprites.
 		/// </summary>
-		private static GUIChartEditorSprites sprites = null;
+		internal static GUIChartEditorSprites sprites = null;
 
 		/// <summary>
 		/// Starts drawing a new chart.
