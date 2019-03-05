@@ -32,7 +32,9 @@ namespace NothingButTheGame.ChartEditor
 
 			// Loads the dot.
 			string dotTexFile = Path.Combine(digitsFolder, "Digit_Dot.png");
+			string minusTexFile = Path.Combine(digitsFolder, "Digit_Minus.png");
 			Digits["."] = AssetDatabase.LoadAssetAtPath<Texture2D>(dotTexFile);
+			Digits["-"] = AssetDatabase.LoadAssetAtPath<Texture2D>(minusTexFile);
 		}
 
 		/// <summary>
@@ -52,6 +54,11 @@ namespace NothingButTheGame.ChartEditor
 			float h = 0f;
 			foreach (char c in text)
 			{
+				if (!Digits.ContainsKey(c.ToString()))
+				{
+					Debug.LogError("Sprite for character \"" + c.ToString() + "\" not found.");
+					continue;
+				}
 				Texture2D tex = Digits[c.ToString()];
 				w += tex.width;
 				h = Mathf.Max(h, tex.height);
