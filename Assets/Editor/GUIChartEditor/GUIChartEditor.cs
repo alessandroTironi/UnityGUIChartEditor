@@ -257,6 +257,7 @@ namespace NothingButTheGame.ChartEditor
 					GL.Vertex3(tex.rect.x + tex.rect.width, tex.rect.y, 0);
 					GL.End();
 				}
+				inspectorMaterial.SetPass(0);
 
 				GL.PopMatrix();
 				GUI.EndClip();
