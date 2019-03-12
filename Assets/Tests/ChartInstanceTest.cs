@@ -22,13 +22,13 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USER OR
  * OTHER DEALINGS IN THE SOFTWARE.
  */
- 
+
 using NUnit.Framework;
 using UnityEngine;
 
-namespace Syrus.Plugins.ChartEditor.Tests
+namespace Syrus.Plugins.ChartEditor
 {
-	public class ChartInstanceTests
+	public class ChartInstanceTest
 	{
 
 		ChartInstance chart;

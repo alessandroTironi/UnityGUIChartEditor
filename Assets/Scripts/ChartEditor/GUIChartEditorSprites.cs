@@ -25,7 +25,6 @@
 
 using System.Collections.Generic;
 using System.IO;
-using UnityEditor;
 using UnityEngine;
 
 namespace Syrus.Plugins.ChartEditor
@@ -50,16 +49,16 @@ namespace Syrus.Plugins.ChartEditor
 			Digits = new Dictionary<string, Texture2D>();
 
 			// Loads textures in memory.
-			string digitsFolder = Path.Combine("Assets", "Editor", "GUIChartEditor", "ChartNumberImages");
+			string digitsFolder = "ChartNumberImages";
 			for (int i = 0; i < 10; i++)
-				Digits[i.ToString()] = AssetDatabase.LoadAssetAtPath<Texture2D>(Path.Combine(digitsFolder,
-					"Digit_" + i.ToString() + ".png"));
+				Digits[i.ToString()] = Resources.Load<Texture2D>(Path.Combine(digitsFolder,
+					"Digit_" + i.ToString()));
 
 			// Loads the dot.
-			string dotTexFile = Path.Combine(digitsFolder, "Digit_Dot.png");
-			string minusTexFile = Path.Combine(digitsFolder, "Digit_Minus.png");
-			Digits["."] = AssetDatabase.LoadAssetAtPath<Texture2D>(dotTexFile);
-			Digits["-"] = AssetDatabase.LoadAssetAtPath<Texture2D>(minusTexFile);
+			string dotTexFile = Path.Combine(digitsFolder, "Digit_Dot");
+			string minusTexFile = Path.Combine(digitsFolder, "Digit_Minus");
+			Digits["."] = Resources.Load<Texture2D>(dotTexFile);
+			Digits["-"] = Resources.Load<Texture2D>(minusTexFile);
 		}
 
 		/// <summary>

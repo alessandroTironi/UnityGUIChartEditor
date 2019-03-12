@@ -26,6 +26,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("ChartEditorTests")]
 namespace Syrus.Plugins.ChartEditor
 {
 	internal class ChartInstance
