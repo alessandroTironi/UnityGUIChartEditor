@@ -99,10 +99,10 @@ As a final summary, here is the code used to generate the chart in the first exa
 ```csharp
 GUILayout.BeginHorizontal(EditorStyles.helpBox); // comment if you render to texture
 GUIChartEditor.BeginChart(10, 100, 100, 100, Color.black,
-    GUIChartEditorOptions.ChartBounds(minX, maxX, minY, maxY),
-    GUIChartEditorOptions.SetOrigin(originType),
-    GUIChartEditorOptions.ShowAxes(axesColor),
-    GUIChartEditorOptions.ShowGrid(gridCellHorSize, gridCellVerSize, gridColor, true)
+    GUIChartEditorOptions.ChartBounds(-0.5f, 1.5f, -0.5f, 1.5f),
+    GUIChartEditorOptions.SetOrigin(ChartOrigins.BottomLeft),
+    GUIChartEditorOptions.ShowAxes(Color.white),
+    GUIChartEditorOptions.ShowGrid(0.25f, 0.25f, Color.grey, true)
     /* , GUIChartEditorOptions.DrawToTexture(texture) */ // un-comment to render to texture
 );
 Vector2[] f1 = new Vector2[] { new Vector2(0f, 0f), new Vector2(0.5f, 1f), new Vector2(1f, 0f) };
