@@ -13,9 +13,9 @@ public class ExampleCustomEditor : Editor
 		float maxX = serializedObject.FindProperty("maxX").floatValue;
 		float minY = serializedObject.FindProperty("minY").floatValue;
 		float maxY = serializedObject.FindProperty("maxY").floatValue;
-		GUIChartEditorOptions.Origins originType = 
+		ChartOrigins originType = 
 			serializedObject.FindProperty("useTopLeftOrigin").boolValue ?
-			GUIChartEditorOptions.Origins.TopLeft : GUIChartEditorOptions.Origins.BottomLeft;
+			ChartOrigins.TopLeft : ChartOrigins.BottomLeft;
 		Color axesColor = serializedObject.FindProperty("axesColor").colorValue;
 		Color gridColor = serializedObject.FindProperty("gridColor").colorValue;
 		float gridCellHorSize = serializedObject.FindProperty("gridCellHorizontalSize").floatValue;
