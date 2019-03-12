@@ -1,9 +1,9 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
 
-namespace NothingButTheGame.ChartEditor
+namespace Syrus.Plugins.ChartEditor
 {
 	internal class GUIChartEditorSprites
 	{

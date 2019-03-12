@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
 using UnityEngine;
 
-namespace NothingButTheGame.ChartEditor.Tests
+namespace Syrus.Plugins.ChartEditor.Tests
 {
 	public class ChartInstanceTests
 	{

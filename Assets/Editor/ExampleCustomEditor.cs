@@ -1,6 +1,6 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEditor;
-using NothingButTheGame.ChartEditor;
+using Syrus.Plugins.ChartEditor;
 
 [CustomEditor(typeof(ExampleMonobehaviour))]
 public class ExampleCustomEditor : Editor

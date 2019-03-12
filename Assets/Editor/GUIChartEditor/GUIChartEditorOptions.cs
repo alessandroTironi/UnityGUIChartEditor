@@ -1,6 +1,6 @@
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace NothingButTheGame.ChartEditor
+namespace Syrus.Plugins.ChartEditor
 {
 	public static class GUIChartEditorOptions
 	{

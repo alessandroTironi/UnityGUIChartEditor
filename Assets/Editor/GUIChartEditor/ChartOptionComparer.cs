@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace NothingButTheGame.ChartEditor
+namespace Syrus.Plugins.ChartEditor
 {
 	/// <summary>
 	/// Sorts chart options according to their priority.

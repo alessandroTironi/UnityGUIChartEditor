@@ -1,7 +1,7 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace NothingButTheGame.ChartEditor
+namespace Syrus.Plugins.ChartEditor
 {
 	internal class ChartInstance
 	{
