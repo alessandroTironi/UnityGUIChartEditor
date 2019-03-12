@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace NothingButTheGame.ChartEditor
 {
-	public class ChartInstance
+	internal class ChartInstance
 	{
 		/// <summary>
 		/// A delegate that processes a pair of coordinate according to a certain coordinate
@@ -67,7 +67,7 @@ namespace NothingButTheGame.ChartEditor
 		/// <summary>
 		/// A line in the chart.
 		/// </summary>
-		protected internal struct Line
+		internal struct Line
 		{
 			public Color lineColor;
 			public Vector2[] points;
@@ -76,7 +76,7 @@ namespace NothingButTheGame.ChartEditor
 		/// <summary>
 		/// A point in the chart.
 		/// </summary>
-		protected internal struct Point
+		internal struct Point
 		{
 			public Color pointColor;
 			public Vector2 point;
@@ -85,7 +85,7 @@ namespace NothingButTheGame.ChartEditor
 		/// <summary>
 		/// A texture drawn on the chart.
 		/// </summary>
-		protected internal struct Texture
+		internal struct Texture
 		{
 			public Texture2D texture;
 			public Rect rect;
@@ -112,7 +112,7 @@ namespace NothingButTheGame.ChartEditor
 		/// <param name="x">The X coordinate.</param>
 		/// <param name="y">The Y coordinate.</param>
 		/// <returns>The same pair of coordinates.</returns>
-		protected internal Vector2 TopLeftOrigin(float x, float y)
+		internal Vector2 TopLeftOrigin(float x, float y)
 		{
 			Vector2 absPoint = LocalToAbsoluteReference(x, y);
 			return FloatToRaw(absPoint.x, absPoint.y);
@@ -125,7 +125,7 @@ namespace NothingButTheGame.ChartEditor
 		/// <param name="y"></param>
 		/// <returns>The pair of coordinates converted from TopLeft to BottomLeft
 		/// orign reference frame.</returns>
-		protected internal Vector2 BottomLeftOrigin(float x, float y)
+		internal Vector2 BottomLeftOrigin(float x, float y)
 		{
 			Vector2 absPoint = LocalToAbsoluteReference(x, y);
 			Vector2 rawPoint = FloatToRaw(absPoint.x, absPoint.y);
@@ -138,7 +138,7 @@ namespace NothingButTheGame.ChartEditor
 		/// Converts the provided coordinates from local space to clip space,
 		/// i.e., from the user-defined reference frame to the clip reference frame.
 		/// </summary>
-		protected internal Vector2 LocalToAbsoluteReference(float x, float y)
+		internal Vector2 LocalToAbsoluteReference(float x, float y)
 		{
 			return new Vector2(Mathf.Abs(minX) + x, Mathf.Abs(minY) + y);
 		}
@@ -147,7 +147,7 @@ namespace NothingButTheGame.ChartEditor
 		/// Converts the provided coordinates from user-defined scale to pixel-sized
 		/// scale.
 		/// </summary>
-		protected internal Vector2 FloatToRaw(float x, float y)
+		internal Vector2 FloatToRaw(float x, float y)
 		{
 			return new Vector2(
 				x * (pixelSizeRect.width / userDefinedRect.width),

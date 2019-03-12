@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using UnityEditor;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace NothingButTheGame.ChartEditor
@@ -15,7 +14,7 @@ namespace NothingButTheGame.ChartEditor
 		/// <summary>
 		/// The current instance of the drawed chart.
 		/// </summary>
-		public static ChartInstance CurrentChart { get; private set; }
+		internal static ChartInstance CurrentChart { get; private set; }
 
 		/// <summary>
 		/// A generic function y = f(x).
@@ -37,8 +36,6 @@ namespace NothingButTheGame.ChartEditor
 		/// <param name="options">A set of options for customizing the chart.</param>
 		public static void BeginChart(Rect layoutRect, Color backgroundColor, params ChartOption[] options)
 		{
-			GUILayout.BeginHorizontal(EditorStyles.helpBox);
-
 			// Creates new instance of a chart.
 			CurrentChart = new ChartInstance(layoutRect, backgroundColor);
 
@@ -262,8 +259,6 @@ namespace NothingButTheGame.ChartEditor
 				GL.PopMatrix();
 				GUI.EndClip();
 			}
-
-			GUILayout.EndHorizontal();
 		}
 	}
 }

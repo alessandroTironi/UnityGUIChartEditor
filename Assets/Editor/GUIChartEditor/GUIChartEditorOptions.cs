@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace NothingButTheGame.ChartEditor
 {
@@ -62,7 +62,7 @@ namespace NothingButTheGame.ChartEditor
 		/// <summary>
 		/// Sets a new proportion for the rect.
 		/// </summary>
-		private class ChartBoundsOption : ChartOption
+		internal class ChartBoundsOption : ChartOption
 		{
 			/// <summary>
 			/// Scale rate values.
@@ -89,7 +89,7 @@ namespace NothingButTheGame.ChartEditor
 		/// <summary>
 		/// Shows axes marking the origin of the reference frame.
 		/// </summary>
-		private class ShowAxesOption : ChartOption
+		internal class ShowAxesOption : ChartOption
 		{
 			private Color axesColor;
 			public ShowAxesOption(Color axesColor) : base(2)
@@ -107,7 +107,7 @@ namespace NothingButTheGame.ChartEditor
 		/// <summary>
 		/// Allows to set the origin of the reference frame in the chart.
 		/// </summary>
-		private class SetOriginOption : ChartOption
+		internal class SetOriginOption : ChartOption
 		{
 			Origins originType;
 			public SetOriginOption(Origins originType) : base(1)
@@ -129,7 +129,7 @@ namespace NothingButTheGame.ChartEditor
 		/// <summary>
 		/// Shows a grid with defined cell sizes.
 		/// </summary>
-		private class ShowGridOption : ChartOption
+		internal class ShowGridOption : ChartOption
 		{
 			private float hSize, vSize;
 			private Color gridColor;
@@ -193,7 +193,7 @@ namespace NothingButTheGame.ChartEditor
 			}
 		}
 
-		private class ShowLabelsOption : ChartOption
+		internal class ShowLabelsOption : ChartOption
 		{
 			/// <summary>
 			/// The coordinates + value of the labels to show.

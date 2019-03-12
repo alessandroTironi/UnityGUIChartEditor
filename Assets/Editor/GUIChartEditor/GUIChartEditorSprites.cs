@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
@@ -20,7 +20,7 @@ namespace NothingButTheGame.ChartEditor
 		/// <summary>
 		/// Loads digit textures from the StreamingAssets folder.
 		/// </summary>
-		internal void LoadTextures()
+		private void LoadTextures()
 		{
 			Digits = new Dictionary<string, Texture2D>();
 
