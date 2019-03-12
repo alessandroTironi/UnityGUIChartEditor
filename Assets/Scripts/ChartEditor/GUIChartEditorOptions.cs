@@ -1,6 +1,31 @@
-﻿using UnityEngine;
+﻿/**
+ * Copyright (c) 2019 Alessandro Tironi
+ * 
+ * Permission is hereby granted, free of charge, to any person
+ * obtaining a copy of this software and associated documentation
+ * files (the "Software"), to deal in the Software without
+ * restriction, including without limitation the rights to use,
+ * copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the
+ * Software is furnished to do so, subject to the following
+ * conditions:
+ * 
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLRDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+ * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USER OR
+ * OTHER DEALINGS IN THE SOFTWARE.
+ */
 
-namespace NothingButTheGame.ChartEditor
+using UnityEngine;
+
+namespace Syrus.Plugins.ChartEditor
 {
 	public static class GUIChartEditorOptions
 	{
@@ -41,16 +66,28 @@ namespace NothingButTheGame.ChartEditor
 		/// <param name="cellWidth">The horizontal size (in user space) of cells.</param>
 		/// <param name="cellHeight">The vertical size (in user space) of cells.</param>
 		/// <param name="gridColor">The color of grid lines.</param>
+		/// <param name="addLabels">If true then add labels at the bottom of axes.</param>
 		/// <returns></returns>
-		public static ChartOption ShowGrid(float cellWidth, float cellHeight, Color gridColor)
+		public static ChartOption ShowGrid(float cellWidth, float cellHeight, Color gridColor, 
+			bool addLabels = false)
 		{
-			return new ShowGridOption(cellWidth, cellHeight, gridColor);
+			return new ShowGridOption(cellWidth, cellHeight, gridColor, addLabels);
+		}
+
+		/// <summary>
+		/// Shows numeric labels on the chart.
+		/// </summary>
+		/// <param name="format">The formatting string used to stringify provided values.</param>
+		/// <param name="labels">3-ples of floats representing value, X and Y of each label.</param>
+		public static ChartOption ShowLabels(string format, params float[] labels)
+		{
+			return new ShowLabelsOption(format, labels);
 		}
 
 		/// <summary>
 		/// Sets a new proportion for the rect.
 		/// </summary>
-		private class ChartBoundsOption : ChartOption
+		internal class ChartBoundsOption : ChartOption
 		{
 			/// <summary>
 			/// Scale rate values.
@@ -77,7 +114,7 @@ namespace NothingButTheGame.ChartEditor
 		/// <summary>
 		/// Shows axes marking the origin of the reference frame.
 		/// </summary>
-		private class ShowAxesOption : ChartOption
+		internal class ShowAxesOption : ChartOption
 		{
 			private Color axesColor;
 			public ShowAxesOption(Color axesColor) : base(2)
@@ -95,7 +132,7 @@ namespace NothingButTheGame.ChartEditor
 		/// <summary>
 		/// Allows to set the origin of the reference frame in the chart.
 		/// </summary>
-		private class SetOriginOption : ChartOption
+		internal class SetOriginOption : ChartOption
 		{
 			Origins originType;
 			public SetOriginOption(Origins originType) : base(1)
@@ -114,36 +151,48 @@ namespace NothingButTheGame.ChartEditor
 			}
 		}
 
-
-		private class ShowGridOption : ChartOption
+		/// <summary>
+		/// Shows a grid with defined cell sizes.
+		/// </summary>
+		internal class ShowGridOption : ChartOption
 		{
 			private float hSize, vSize;
 			private Color gridColor;
+			private bool addLabels;
 
-			public ShowGridOption(float hSize, float vSize, Color gridColor) : base(2)
+			public ShowGridOption(float hSize, float vSize, Color gridColor, bool addLabels) : base(2)
 			{
 				this.hSize = hSize;
 				this.vSize = vSize;
 				this.gridColor = gridColor;
+				this.addLabels = addLabels;
 			}
 
 			public override void ApplyOption()
 			{
 				ChartInstance chart = GUIChartEditor.CurrentChart;
 
-				// Draws horizontal lines.
+				// Draws vertical lines.
 				float x = chart.minX + (Mathf.Abs(chart.minX) % hSize);
 				while (x < chart.maxX)
 				{
 					GUIChartEditor.PushLineChart(new Vector2[]
 					{
-					new Vector2(x, chart.minY),
-					new Vector2(x, chart.maxY)
+						new Vector2(x, chart.minY),
+						new Vector2(x, chart.maxY)
 					}, gridColor);
+
+					if (addLabels && x != 0 && x > chart.minX)
+					{
+						float minHeight = Mathf.Ceil(GUIChartEditor.sprites.Digits["0"].height / 2 + 2);
+						float vOffset = minHeight * GUIChartEditor.CurrentChart.userDefinedRect.height
+							/ GUIChartEditor.CurrentChart.pixelSizeRect.height;
+						GUIChartEditor.PushValueLabel(x, x, -vOffset, "0.0#");
+					}
 					x += hSize;
 				}
 
-				// Draws vertical lines.
+				// Draws horizontal lines.
 				float y = chart.minY + (Mathf.Abs(chart.minY) % vSize);
 				while (y < chart.maxY)
 				{
@@ -152,8 +201,50 @@ namespace NothingButTheGame.ChartEditor
 					new Vector2(chart.minX, y),
 					new Vector2(chart.maxX, y)
 					}, gridColor);
+
+					if (addLabels && y != 0 && y > chart.minY)
+					{
+						string label = y.ToString("0.0#").Replace(',', '.');
+						float hSize = 0f;
+						foreach (char c in label)
+							hSize += GUIChartEditor.sprites.Digits[c.ToString()].width + 1;
+						float hOffset = hSize / 2 * GUIChartEditor.CurrentChart.userDefinedRect.width
+							/ GUIChartEditor.CurrentChart.pixelSizeRect.width;
+						GUIChartEditor.PushValueLabel(y, -hOffset, y, "0.0#");
+					}
+
 					y += vSize;
 				}
+			}
+		}
+
+		internal class ShowLabelsOption : ChartOption
+		{
+			/// <summary>
+			/// The coordinates + value of the labels to show.
+			/// </summary>
+			private float[] labels;
+
+			/// <summary>
+			/// The string that defines the formatting rule for labels.
+			/// </summary>
+			private string format;
+
+			public ShowLabelsOption(string format, params float[] labels) : base(3)
+			{
+				if (labels.Length % 3 != 0)
+				{
+					Debug.LogError("ShowLabels requires a multiple of 3 parameters.");
+					return;
+				}
+				this.format = format;
+				this.labels = labels;
+			}
+
+			public override void ApplyOption()
+			{
+				for (int i = 0; i < labels.Length; i += 3)
+					GUIChartEditor.PushValueLabel(labels[i], labels[i + 1], labels[i + 2], format);
 			}
 		}
 

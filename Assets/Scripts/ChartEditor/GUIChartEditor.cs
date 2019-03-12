@@ -1,15 +1,45 @@
-﻿using System.Collections.Generic;
-using UnityEditor;
+﻿/**
+ * Copyright (c) 2019 Alessandro Tironi
+ * 
+ * Permission is hereby granted, free of charge, to any person
+ * obtaining a copy of this software and associated documentation
+ * files (the "Software"), to deal in the Software without
+ * restriction, including without limitation the rights to use,
+ * copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the
+ * Software is furnished to do so, subject to the following
+ * conditions:
+ * 
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLRDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+ * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USER OR
+ * OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+using System.Collections.Generic;
 using UnityEngine;
 
-namespace NothingButTheGame.ChartEditor
+namespace Syrus.Plugins.ChartEditor
 {
-	public class GUIChartEditor
+	public static class GUIChartEditor
 	{
+		static GUIChartEditor()
+		{
+			if (sprites == null)
+				sprites = new GUIChartEditorSprites();
+		}
+
 		/// <summary>
 		/// The current instance of the drawed chart.
 		/// </summary>
-		public static ChartInstance CurrentChart { get; private set; }
+		internal static ChartInstance CurrentChart { get; private set; }
 
 		/// <summary>
 		/// A generic function y = f(x).
@@ -19,6 +49,11 @@ namespace NothingButTheGame.ChartEditor
 		public delegate float ChartFunction(float x);
 
 		/// <summary>
+		/// Collects all the required sprites.
+		/// </summary>
+		internal static GUIChartEditorSprites sprites = null;
+
+		/// <summary>
 		/// Starts drawing a new chart.
 		/// </summary>
 		/// <param name="layoutRect">The <see cref="Rect"/> used as layout.</param>
@@ -26,8 +61,6 @@ namespace NothingButTheGame.ChartEditor
 		/// <param name="options">A set of options for customizing the chart.</param>
 		public static void BeginChart(Rect layoutRect, Color backgroundColor, params ChartOption[] options)
 		{
-			GUILayout.BeginHorizontal(EditorStyles.helpBox);
-
 			// Creates new instance of a chart.
 			CurrentChart = new ChartInstance(layoutRect, backgroundColor);
 
@@ -89,6 +122,22 @@ namespace NothingButTheGame.ChartEditor
 			p.pointColor = pointColor;
 			p.point = CurrentChart.coordinatesProcessor(point.x, point.y);
 			CurrentChart.pointQueue.Enqueue(p);
+		}
+
+		/// <summary>
+		/// Draws a label representing a float number in the provided position.
+		/// </summary>
+		/// <param name="value">The number to draw on the chart.</param>
+		/// <param name="x">The X position of the label (in user space).</param>
+		/// <param name="y">The Y position of the label (in user space).</param>
+		/// <param name="floatFormat">The format to apply when converting float to string.</param>
+		public static void PushValueLabel(float value, float x, float y, string floatFormat = "0.00")
+		{
+			Vector2 coords = CurrentChart.coordinatesProcessor(x, y);
+			string textFloat = value.ToString(floatFormat).Replace(',', '.');
+			var requiredTextures = sprites.GetTextures(textFloat, (int)coords.x, (int)coords.y);
+			foreach (var tex in requiredTextures)
+				CurrentChart.textureQueue.Enqueue(tex);
 		}
 
 		/// <summary>
@@ -210,14 +259,31 @@ namespace NothingButTheGame.ChartEditor
 					foreach (Vector2 p in l.points)
 						GL.Vertex3(p.x, p.y, 0);
 				}
-
 				GL.End();
+
+				// Draws textures.
+				Material guiTexMat = new Material(Shader.Find("Hidden/Internal-GUITexture"));
+				while (CurrentChart.textureQueue.Count > 0)
+				{
+					GL.Begin(GL.QUADS);
+					var tex = CurrentChart.textureQueue.Dequeue();
+					guiTexMat.SetTexture("_MainTex", tex.texture);
+					guiTexMat.SetPass(0);
+					GL.TexCoord2(0, 1);
+					GL.Vertex3(tex.rect.x, tex.rect.y, 0);
+					GL.TexCoord2(0, 0);
+					GL.Vertex3(tex.rect.x, tex.rect.y + tex.rect.height, 0);
+					GL.TexCoord2(1, 0);
+					GL.Vertex3(tex.rect.x + tex.rect.width, tex.rect.y + tex.rect.height, 0);
+					GL.TexCoord2(1, 1);
+					GL.Vertex3(tex.rect.x + tex.rect.width, tex.rect.y, 0);
+					GL.End();
+				}
+				inspectorMaterial.SetPass(0);
 
 				GL.PopMatrix();
 				GUI.EndClip();
 			}
-
-			GUILayout.EndHorizontal();
 		}
 	}
 }
