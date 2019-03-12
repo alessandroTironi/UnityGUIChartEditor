@@ -246,13 +246,15 @@ namespace Syrus.Plugins.ChartEditor
 				}
 
 				// Draws the points.
-				GL.Begin(GL.LINES);
+				GL.Begin(GL.QUADS);
 				while (CurrentChart.pointQueue.Count > 0)
 				{
 					ChartInstance.Point p = CurrentChart.pointQueue.Dequeue();
 					GL.Color(p.pointColor);
-					GL.Vertex3(p.point.x, p.point.y, 0);
-					GL.Vertex3(p.point.x, p.point.y, 0);
+					GL.Vertex3(p.point.x - 2, p.point.y - 2, 0);
+					GL.Vertex3(p.point.x + 2, p.point.y - 2, 0);
+					GL.Vertex3(p.point.x + 2, p.point.y + 2, 0);
+					GL.Vertex3(p.point.x - 2, p.point.y + 2, 0);
 				}
 				GL.End();
 
