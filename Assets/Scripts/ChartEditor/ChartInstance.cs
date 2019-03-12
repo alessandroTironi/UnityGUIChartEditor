@@ -1,9 +1,35 @@
-﻿using System.Collections.Generic;
+﻿/**
+ * Copyright (c) 2019 Alessandro Tironi
+ * 
+ * Permission is hereby granted, free of charge, to any person
+ * obtaining a copy of this software and associated documentation
+ * files (the "Software"), to deal in the Software without
+ * restriction, including without limitation the rights to use,
+ * copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the
+ * Software is furnished to do so, subject to the following
+ * conditions:
+ * 
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLRDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+ * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USER OR
+ * OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+using System.Collections.Generic;
 using UnityEngine;
 
-namespace NothingButTheGame.ChartEditor
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("ChartEditorTests")]
+namespace Syrus.Plugins.ChartEditor
 {
-	public class ChartInstance
+	internal class ChartInstance
 	{
 		/// <summary>
 		/// A delegate that processes a pair of coordinate according to a certain coordinate
@@ -20,14 +46,19 @@ namespace NothingButTheGame.ChartEditor
 		protected internal ProcessPointCoordinates coordinatesProcessor;
 
 		/// <summary>
-		/// The stack of lines to be drawn.
+		/// The queue of lines to be drawn.
 		/// </summary>
 		protected internal Queue<Line> lineQueue { get; private set; } = new Queue<Line>();
 
 		/// <summary>
-		/// The stack of points to be drawn.
+		/// The queue of points to be drawn.
 		/// </summary>
 		protected internal Queue<Point> pointQueue { get; private set; } = new Queue<Point>();
+
+		/// <summary>
+		/// The queue of textures to be drawn.
+		/// </summary>
+		protected internal Queue<Texture> textureQueue { get; private set; } = new Queue<Texture>();
 
 		/// <summary>
 		/// The current layout rect.
@@ -62,7 +93,7 @@ namespace NothingButTheGame.ChartEditor
 		/// <summary>
 		/// A line in the chart.
 		/// </summary>
-		protected internal struct Line
+		internal struct Line
 		{
 			public Color lineColor;
 			public Vector2[] points;
@@ -71,10 +102,19 @@ namespace NothingButTheGame.ChartEditor
 		/// <summary>
 		/// A point in the chart.
 		/// </summary>
-		protected internal struct Point
+		internal struct Point
 		{
 			public Color pointColor;
 			public Vector2 point;
+		}
+
+		/// <summary>
+		/// A texture drawn on the chart.
+		/// </summary>
+		internal struct Texture
+		{
+			public Texture2D texture;
+			public Rect rect;
 		}
 
 		public ChartInstance(Rect layoutRect, Color backgroundColor)
@@ -98,7 +138,7 @@ namespace NothingButTheGame.ChartEditor
 		/// <param name="x">The X coordinate.</param>
 		/// <param name="y">The Y coordinate.</param>
 		/// <returns>The same pair of coordinates.</returns>
-		protected internal Vector2 TopLeftOrigin(float x, float y)
+		internal Vector2 TopLeftOrigin(float x, float y)
 		{
 			Vector2 absPoint = LocalToAbsoluteReference(x, y);
 			return FloatToRaw(absPoint.x, absPoint.y);
@@ -111,7 +151,7 @@ namespace NothingButTheGame.ChartEditor
 		/// <param name="y"></param>
 		/// <returns>The pair of coordinates converted from TopLeft to BottomLeft
 		/// orign reference frame.</returns>
-		protected internal Vector2 BottomLeftOrigin(float x, float y)
+		internal Vector2 BottomLeftOrigin(float x, float y)
 		{
 			Vector2 absPoint = LocalToAbsoluteReference(x, y);
 			Vector2 rawPoint = FloatToRaw(absPoint.x, absPoint.y);
@@ -124,7 +164,7 @@ namespace NothingButTheGame.ChartEditor
 		/// Converts the provided coordinates from local space to clip space,
 		/// i.e., from the user-defined reference frame to the clip reference frame.
 		/// </summary>
-		protected internal Vector2 LocalToAbsoluteReference(float x, float y)
+		internal Vector2 LocalToAbsoluteReference(float x, float y)
 		{
 			return new Vector2(Mathf.Abs(minX) + x, Mathf.Abs(minY) + y);
 		}
@@ -133,7 +173,7 @@ namespace NothingButTheGame.ChartEditor
 		/// Converts the provided coordinates from user-defined scale to pixel-sized
 		/// scale.
 		/// </summary>
-		protected internal Vector2 FloatToRaw(float x, float y)
+		internal Vector2 FloatToRaw(float x, float y)
 		{
 			return new Vector2(
 				x * (pixelSizeRect.width / userDefinedRect.width),

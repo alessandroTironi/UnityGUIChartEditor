@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UnityEditor;
-using NothingButTheGame.ChartEditor;
+using Syrus.Plugins.ChartEditor;
 
 [CustomEditor(typeof(ExampleMonobehaviour))]
 public class ExampleCustomEditor : Editor
@@ -21,11 +21,13 @@ public class ExampleCustomEditor : Editor
 		float gridCellHorSize = serializedObject.FindProperty("gridCellHorizontalSize").floatValue;
 		float gridCellVerSize = serializedObject.FindProperty("gridCellVerticalSize").floatValue;
 
+		GUILayout.BeginHorizontal(EditorStyles.helpBox);
 		GUIChartEditor.BeginChart(10, 100, 100, 100, Color.black,
 			GUIChartEditorOptions.ChartBounds(minX, maxX, minY, maxY),
 			GUIChartEditorOptions.SetOrigin(originType),
 			GUIChartEditorOptions.ShowAxes(axesColor),
-			GUIChartEditorOptions.ShowGrid(gridCellHorSize, gridCellVerSize, gridColor));
+			GUIChartEditorOptions.ShowGrid(gridCellHorSize, gridCellVerSize, gridColor, true)
+			/*,GUIChartEditorOptions.ShowLabels("0.##", 1f, 1f, -0.1f, 1f, -0.075f, 1f)*/);
 
 		// Draws lines
 		SerializedProperty[] functions = 
@@ -44,5 +46,6 @@ public class ExampleCustomEditor : Editor
 		GUIChartEditor.PushFunction(x => x * x * x, -10f, 10f, new Color(0f, 1f, 0f, 0.5f));
 
 		GUIChartEditor.EndChart();
+		GUILayout.EndHorizontal();
 	}
 }
