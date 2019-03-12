@@ -117,6 +117,17 @@ namespace Syrus.Plugins.ChartEditor
 			public Rect rect;
 		}
 
+		/// <summary>
+		/// The material used for the rendering.
+		/// </summary>
+		internal Material material;
+
+		/// <summary>
+		/// The texture the graph will be drawn on. If no textures are specified,
+		/// the graph will be rendered on the main screen.
+		/// </summary>
+		internal Texture2D outputTexture = null;
+
 		public ChartInstance(Rect layoutRect, Color backgroundColor)
 		{
 			coordinatesProcessor = BottomLeftOrigin;

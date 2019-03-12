@@ -64,6 +64,9 @@ namespace Syrus.Plugins.ChartEditor
 			// Creates new instance of a chart.
 			CurrentChart = new ChartInstance(layoutRect, backgroundColor);
 
+			// Default material
+			CurrentChart.material = new Material(Shader.Find("Hidden/Internal-Colored"));
+			
 			// Applies options.
 			var optionsList = new List<ChartOption>(options);
 			optionsList.Sort(new ChartOptionComparer());
@@ -201,15 +204,18 @@ namespace Syrus.Plugins.ChartEditor
 		/// </summary>
 		public static void EndChart()
 		{
-			if (Event.current.type == EventType.Repaint)
+			if (CurrentChart.outputTexture != null || Event.current.type == EventType.Repaint)
 			{
-				GUI.BeginClip(CurrentChart.pixelSizeRect);
+				if (CurrentChart.outputTexture == null)
+					GUI.BeginClip(CurrentChart.pixelSizeRect);
 				GL.PushMatrix();
+				if (CurrentChart.outputTexture != null)
+					GL.LoadPixelMatrix(0, CurrentChart.outputTexture.width, 
+						CurrentChart.outputTexture.height, 0);
 
 				// Clear the current render buffer.
 				GL.Clear(true, false, Color.black);
-				Material inspectorMaterial = new Material(Shader.Find("Hidden/Internal-Colored"));
-				inspectorMaterial.SetPass(0);
+				CurrentChart.material.SetPass(0);
 
 				// Draws the background.
 				GL.Begin(GL.QUADS);
@@ -279,10 +285,22 @@ namespace Syrus.Plugins.ChartEditor
 					GL.Vertex3(tex.rect.x + tex.rect.width, tex.rect.y, 0);
 					GL.End();
 				}
-				inspectorMaterial.SetPass(0);
 
 				GL.PopMatrix();
-				GUI.EndClip();
+				if (CurrentChart.outputTexture == null)
+					GUI.EndClip();
+
+				// Draw graph on the output texture if needed.
+				if (CurrentChart.outputTexture != null)
+				{
+					RenderTexture rt = RenderTexture.active;
+					CurrentChart.outputTexture.ReadPixels(new Rect(0, 0,
+						CurrentChart.outputTexture.width, CurrentChart.outputTexture.height), 0, 0);
+					CurrentChart.outputTexture.Apply(false); // do not apply mipmaps
+					CurrentChart.outputTexture.Compress(true); // compress with high quality
+					RenderTexture.active = null;
+					RenderTexture.ReleaseTemporary(rt);
+				}
 			}
 		}
 	}

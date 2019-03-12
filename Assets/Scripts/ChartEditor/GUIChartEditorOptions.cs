@@ -83,7 +83,17 @@ namespace Syrus.Plugins.ChartEditor
 		{
 			return new ShowLabelsOption(format, labels);
 		}
-}
+
+		/// <summary>
+		/// Draws the chart to a texture.
+		/// </summary>
+		/// <param name="texture">The output texture.</param>
+		/// <param name="material">The material the chart will be rendered on.</param>
+		public static ChartOption DrawToTexture(Texture2D texture)
+		{
+			return new DrawToTextureOption(texture);
+		}
+	}
 
 	/// <summary>
 	/// An option for <see cref="GUIChartEditor"/>.
