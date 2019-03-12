@@ -611,10 +611,10 @@ PlayerSettings:
   facebookXfbml: 0
   facebookFrictionlessRequests: 1
   apiCompatibilityLevel: 6
-  cloudProjectId: 
+  cloudProjectId: 5bf4a774-f4d1-4624-bad4-eb943b6dbbec
   framebufferDepthMemorylessMode: 0
-  projectName: 
-  organizationId: 
+  projectName: GUIChartEditor
+  organizationId: syrussoftware
   cloudEnabled: 0
   enableNativePlatformBackendsForNewInputSystem: 0
   disableOldInputManagerSupport: 0
