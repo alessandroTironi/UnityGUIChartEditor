@@ -26,7 +26,7 @@
 using NUnit.Framework;
 using UnityEngine;
 
-namespace Syrus.Plugins.ChartEditor
+namespace Syrus.Plugins.ChartEditor.Tests
 {
 	public class ChartInstanceTest
 	{
