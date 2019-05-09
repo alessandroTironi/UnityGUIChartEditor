@@ -24,24 +24,43 @@ The <code lang="csharp">GUIChartEditor.BeginChart</code> method requires to spec
 
 The method <code lang="csharp">GUIChartEditor.PushFunction(ChartFunction f, float min, float max, Color functionColor, float step = -1)</code> allows to draw the function defined by <code>f</code>, which is a delegate that accepts a float as parameter and returns a float, in the <code>[min, max]</code> interval. The <code>step</code> parameter defines the sampling rate followed when plotting the chart. If it is left to -1, the function value will be computed at each pixel.
 
+```csharp
+GUIChartEditor.PushFunction(x => x * x * x, -1f, 2f, Color.green);
+```
 ![Delegate Example](doc/DelegateExample.png?raw=true "Delegate")
 
 ### Plotting a point-by-point function
 
 The method <code>GUIChartEditor.PushLineChart(Vector2[] points, Color lineColor)</code> allows to define a polygonal function point by point and plot it in the chart.
 
+```csharp
+Vector2[] samples = new Vector2[] 
+{ 
+    new Vector2(0f, 0f), new Vector2(0.5f, 1f), new Vector2(1f, 0f)
+};
+GUIChartEditor.PushLineChart(samples, Color.red);
+```
 ![Point-by-point Example](doc/PointByPointExample.png?raw=true "Point-by-point")
 
 ### Plotting points
 
 Use the method <code>GUIChartEditor.PushPoint(Vector2 point, Color pointColor)</code> to draw just one point in the chart.
 
+```csharp
+GUIChartEditor.PushPoint(new Vector2(0.5f, 0.5f), Color.red);
+GUIChartEditor.PushPoint(new Vector2(0.75f, 0.5f), Color.green);
+GUIChartEditor.PushPoint(new Vector2(1f, 1f), Color.yellow);
+```
 ![Point Example](doc/PointExample.png?raw=true "Points")
 
 ### Adding numerical labels
 
 The method <code>GUIChartEditor.PushValueLabel(float value, float x, float y, string floatFormat = "0.00")</code> adds a label representing <code>value</code> in the <code>(x,y)</code> position. The float will be formatted according to the provided <code>floatFormat</code>.
 
+```csharp
+GUIChartEditor.PushValueLabel(0.95f, 1f, 0.95f);
+GUIChartEditor.PushValueLabel(0.43f, 0.5f, 0.43f);
+```
 ![Labels Example](doc/LabelsExample.png?raw=true "Labels")
 
 ## Available options
@@ -78,12 +97,13 @@ The <code>GUIChartEditorOptions.DrawToTexture(Texture2D texture)</code> will dra
 
 As a final summary, here is the code used to generate the chart in the first example.
 ```csharp
-GUILayout.BeginHorizontal(EditorStyles.helpBox);
+GUILayout.BeginHorizontal(EditorStyles.helpBox); // comment if you render to texture
 GUIChartEditor.BeginChart(10, 100, 100, 100, Color.black,
-    GUIChartEditorOptions.ChartBounds(minX, maxX, minY, maxY),
-    GUIChartEditorOptions.SetOrigin(originType),
-    GUIChartEditorOptions.ShowAxes(axesColor),
-    GUIChartEditorOptions.ShowGrid(gridCellHorSize, gridCellVerSize, gridColor, true)
+    GUIChartEditorOptions.ChartBounds(-0.5f, 1.5f, -0.5f, 1.5f),
+    GUIChartEditorOptions.SetOrigin(ChartOrigins.BottomLeft),
+    GUIChartEditorOptions.ShowAxes(Color.white),
+    GUIChartEditorOptions.ShowGrid(0.25f, 0.25f, Color.grey, true)
+    /* , GUIChartEditorOptions.DrawToTexture(texture) */ // un-comment to render to texture
 );
 Vector2[] f1 = new Vector2[] { new Vector2(0f, 0f), new Vector2(0.5f, 1f), new Vector2(1f, 0f) };
 Vector2[] f2 = new Vector2[] { new Vector2(0f, 0f), new Vector2(0.75f, 1f), new Vector2(1.4f, 0f) };
@@ -95,7 +115,7 @@ GUIChartEditor.PushPoint(new Vector2(0.75f, 1f), Color.yellow);
 GUIChartEditor.PushFunction(x => x * x * x, -10f, 10f, new Color(0f, 1f, 0f, 0.5f));
 
 GUIChartEditor.EndChart();
-GUILayout.EndHorizontal();
+GUILayout.EndHorizontal(); // comment if you render to texture
 ```
 
 ![Complete Example](doc/CompleteExample.png?raw=true "Complete")
