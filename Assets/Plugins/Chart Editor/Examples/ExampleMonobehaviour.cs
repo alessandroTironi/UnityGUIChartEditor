@@ -17,6 +17,8 @@ namespace Syrus.Plugins.ChartEditor.Examples
 
         public Color gridColor;
 
+        public Color backgroundColor = Color.black;
+
         public Function[] functions;
 
         [Serializable]

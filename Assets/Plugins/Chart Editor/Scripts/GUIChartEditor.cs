@@ -282,7 +282,7 @@ namespace Syrus.Plugins.ChartEditor
 
                 // Draws the background.
                 GL.Begin(GL.QUADS);
-                GL.Color(Color.black);
+                GL.Color(CurrentChart.currentBgColor);
                 GL.Vertex3(0, 0, 0);
                 GL.Vertex3(CurrentChart.pixelSizeRect.width, 0, 0);
                 GL.Vertex3(CurrentChart.pixelSizeRect.width, CurrentChart.pixelSizeRect.height, 0);

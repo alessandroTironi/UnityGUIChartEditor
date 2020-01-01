@@ -17,13 +17,14 @@ namespace Syrus.Plugins.ChartEditor.Examples
             ChartOrigins originType =
                 serializedObject.FindProperty( "useTopLeftOrigin" ).boolValue ?
                 ChartOrigins.TopLeft : ChartOrigins.BottomLeft;
+            Color bgColor = serializedObject.FindProperty( "backgroundColor" ).colorValue;
             Color axesColor = serializedObject.FindProperty( "axesColor" ).colorValue;
             Color gridColor = serializedObject.FindProperty( "gridColor" ).colorValue;
             float gridCellHorSize = serializedObject.FindProperty( "gridCellHorizontalSize" ).floatValue;
             float gridCellVerSize = serializedObject.FindProperty( "gridCellVerticalSize" ).floatValue;
 
             GUILayout.BeginHorizontal( EditorStyles.helpBox );
-            GUIChartEditor.BeginChart( 10, 100, 100, 100, Color.black,
+            GUIChartEditor.BeginChart( 10, 100, 100, 100, bgColor,
                 GUIChartEditorOptions.ChartBounds( minX, maxX, minY, maxY ),
                 GUIChartEditorOptions.SetOrigin( originType ),
                 GUIChartEditorOptions.ShowAxes( axesColor ),
