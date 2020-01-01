@@ -49,7 +49,7 @@ namespace Syrus.Plugins.ChartEditor
 			Digits = new Dictionary<string, Texture2D>();
 
 			// Loads textures in memory.
-			string digitsFolder = "ChartNumberImages";
+			string digitsFolder = "Chart Editor";
 			for (int i = 0; i < 10; i++)
 				Digits[i.ToString()] = Resources.Load<Texture2D>(Path.Combine(digitsFolder,
 					"Digit_" + i.ToString()));
