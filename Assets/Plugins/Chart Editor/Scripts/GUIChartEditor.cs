@@ -362,7 +362,17 @@ namespace Syrus.Plugins.ChartEditor
                     CurrentChart.outputTexture.ReadPixels(new Rect(0, 0,
                         CurrentChart.outputTexture.width, CurrentChart.outputTexture.height), 0, 0);
                     CurrentChart.outputTexture.Apply(false); // do not apply mipmaps
-                    CurrentChart.outputTexture.Compress(true); // compress with high quality
+
+                    // Apply compression, where 0 indicates no compression
+                    byte compress = (byte)CurrentChart.outputTextureSettings.compression;
+                    if( compress == 1 )
+                        CurrentChart.outputTexture.Compress(true); // compress with high quality
+                    else if( compress == 2 )
+                        CurrentChart.outputTexture.Compress(false); // compress with low quality
+
+                    //Apply filter
+                    CurrentChart.outputTexture.filterMode = CurrentChart.outputTextureSettings.filtering;
+
                     RenderTexture.active = null;
                     RenderTexture.ReleaseTemporary(rt);
                 }

@@ -88,10 +88,32 @@ namespace Syrus.Plugins.ChartEditor
 		/// Draws the chart to a texture.
 		/// </summary>
 		/// <param name="texture">The output texture.</param>
-		/// <param name="material">The material the chart will be rendered on.</param>
 		public static ChartOption DrawToTexture(Texture2D texture)
 		{
 			return new DrawToTextureOption(texture);
+		}
+        /// <summary>
+		/// Draws the chart to a texture.
+		/// </summary>
+		/// <param name="texture">The output texture.</param>
+        /// <param name="renderSettings">The render quality settings of the output texture.</param>
+		public static ChartOption DrawToTexture(Texture2D texture, TextureSettings renderSettings)
+		{
+			return new DrawToTextureOption(texture, renderSettings);
+		}
+        /// <summary>
+		/// Draws the chart to a texture.
+		/// </summary>
+		/// <param name="texture">The output texture.</param>
+        /// <param name="filtering">The filtering applied to the texture when rendered.</param>
+        /// <param name="compression">How much the output texture will be compressed.</param>
+		public static ChartOption DrawToTexture(Texture2D texture, FilterMode filtering, TextureCompression compression)
+		{
+            TextureSettings settings = new TextureSettings();
+            settings.filtering = filtering;
+            settings.compression = compression;
+
+            return new DrawToTextureOption(texture, settings);
 		}
 	}
 
