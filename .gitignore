@@ -12,7 +12,7 @@
 ExportedObj/
 .consulo/
 *.csproj
-*.unityproj
+#*.unityproj
 *.sln
 *.suo
 *.tmp
