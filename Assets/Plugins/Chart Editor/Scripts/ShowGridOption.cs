@@ -38,8 +38,8 @@ namespace Syrus.Plugins.ChartEditor
 
 		public ShowGridOption(float hSize, float vSize, Color gridColor, bool addLabels) : base(2)
 		{
-			this.hSize = hSize;
-			this.vSize = vSize;
+			this.hSize = Mathf.Max(0, hSize);
+			this.vSize = Mathf.Max(0, vSize);
 			this.gridColor = gridColor;
 			this.addLabels = addLabels;
 		}
