@@ -119,3 +119,7 @@ GUILayout.EndHorizontal(); // comment if you render to texture
 ```
 
 ![Complete Example](doc/CompleteExample.png?raw=true "Complete")
+
+# Contributors
+
+@Bamboy
