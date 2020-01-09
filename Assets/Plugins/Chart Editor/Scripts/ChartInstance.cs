@@ -128,6 +128,11 @@ namespace Syrus.Plugins.ChartEditor
 		/// </summary>
 		internal Texture2D outputTexture = null;
 
+        /// <summary>
+        /// The render quality the output graph texture has, if we draw on it.
+		/// </summary>
+        internal TextureSettings outputTextureSettings;
+
 		public ChartInstance(Rect layoutRect, Color backgroundColor)
 		{
 			coordinatesProcessor = BottomLeftOrigin;
