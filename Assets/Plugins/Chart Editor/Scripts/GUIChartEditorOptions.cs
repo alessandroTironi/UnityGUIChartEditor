@@ -115,6 +115,14 @@ namespace Syrus.Plugins.ChartEditor
 
             return new DrawToTextureOption(texture, settings);
 		}
+
+        /// <summary>
+        /// Shows a "." instead of a "," when separating fractional numbers
+        /// </summary>
+        public static ChartOption ShowAltPeriod()
+        {
+	        return new ShowAltPeriodOption();
+        }
 	}
 
 	/// <summary>
